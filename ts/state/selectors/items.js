@@ -1,0 +1,76 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var items_exports = {};
+__export(items_exports, {
+  getAreWeASubscriber: () => getAreWeASubscriber,
+  getCustomColors: () => getCustomColors,
+  getDefaultConversationColor: () => getDefaultConversationColor,
+  getEmojiSkinTone: () => getEmojiSkinTone,
+  getHasAllStoriesMuted: () => getHasAllStoriesMuted,
+  getHideMenuBar: () => getHideMenuBar,
+  getItems: () => getItems,
+  getPinnedConversationIds: () => getPinnedConversationIds,
+  getPreferredLeftPaneWidth: () => getPreferredLeftPaneWidth,
+  getPreferredReactionEmoji: () => getPreferredReactionEmoji,
+  getStoriesEnabled: () => getStoriesEnabled,
+  getUniversalExpireTimer: () => getUniversalExpireTimer,
+  getUserAgent: () => getUserAgent,
+  getUsernamesEnabled: () => getUsernamesEnabled
+});
+module.exports = __toCommonJS(items_exports);
+var import_reselect = require("reselect");
+var import_lodash = require("lodash");
+var import_universalExpireTimer = require("../../util/universalExpireTimer");
+var import_Colors = require("../../types/Colors");
+var import_preferredReactionEmoji = require("../../reactions/preferredReactionEmoji");
+const DEFAULT_PREFERRED_LEFT_PANE_WIDTH = 320;
+const getItems = /* @__PURE__ */ __name((state) => state.items, "getItems");
+const getHasAllStoriesMuted = (0, import_reselect.createSelector)(getItems, ({ hasAllStoriesMuted }) => Boolean(hasAllStoriesMuted));
+const getAreWeASubscriber = (0, import_reselect.createSelector)(getItems, ({ areWeASubscriber }) => Boolean(areWeASubscriber));
+const getUserAgent = (0, import_reselect.createSelector)(getItems, (state) => state.userAgent);
+const getPinnedConversationIds = (0, import_reselect.createSelector)(getItems, (state) => state.pinnedConversationIds || []);
+const getUniversalExpireTimer = (0, import_reselect.createSelector)(getItems, (state) => state[import_universalExpireTimer.ITEM_NAME] || 0);
+const isRemoteConfigFlagEnabled = /* @__PURE__ */ __name((config, key) => Boolean(config[key]?.enabled), "isRemoteConfigFlagEnabled");
+const getRemoteConfig = (0, import_reselect.createSelector)(getItems, (state) => state.remoteConfig || {});
+const getUsernamesEnabled = (0, import_reselect.createSelector)(getRemoteConfig, (remoteConfig) => isRemoteConfigFlagEnabled(remoteConfig, "desktop.usernames"));
+const getStoriesEnabled = (0, import_reselect.createSelector)(getItems, getRemoteConfig, (state, remoteConfig) => state.hasStoriesEnabled !== false && (isRemoteConfigFlagEnabled(remoteConfig, "desktop.internalUser") || isRemoteConfigFlagEnabled(remoteConfig, "desktop.stories")));
+const getDefaultConversationColor = (0, import_reselect.createSelector)(getItems, (state) => state.defaultConversationColor ?? import_Colors.DEFAULT_CONVERSATION_COLOR);
+const getCustomColors = (0, import_reselect.createSelector)(getItems, (state) => state.customColors?.colors);
+const getEmojiSkinTone = (0, import_reselect.createSelector)(getItems, ({ skinTone }) => typeof skinTone === "number" && (0, import_lodash.isInteger)(skinTone) && skinTone >= 0 && skinTone <= 5 ? skinTone : 0);
+const getPreferredLeftPaneWidth = (0, import_reselect.createSelector)(getItems, ({ preferredLeftPaneWidth }) => typeof preferredLeftPaneWidth === "number" && Number.isInteger(preferredLeftPaneWidth) ? preferredLeftPaneWidth : DEFAULT_PREFERRED_LEFT_PANE_WIDTH);
+const getPreferredReactionEmoji = (0, import_reselect.createSelector)(getItems, getEmojiSkinTone, (state, skinTone) => (0, import_preferredReactionEmoji.getPreferredReactionEmoji)(state.preferredReactionEmoji, skinTone));
+const getHideMenuBar = (0, import_reselect.createSelector)(getItems, (state) => Boolean(state["hide-menu-bar"]));
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  getAreWeASubscriber,
+  getCustomColors,
+  getDefaultConversationColor,
+  getEmojiSkinTone,
+  getHasAllStoriesMuted,
+  getHideMenuBar,
+  getItems,
+  getPinnedConversationIds,
+  getPreferredLeftPaneWidth,
+  getPreferredReactionEmoji,
+  getStoriesEnabled,
+  getUniversalExpireTimer,
+  getUserAgent,
+  getUsernamesEnabled
+});
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiaXRlbXMudHMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbIi8vIENvcHlyaWdodCAyMDE5LTIwMjIgU2lnbmFsIE1lc3NlbmdlciwgTExDXG4vLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogQUdQTC0zLjAtb25seVxuXG5pbXBvcnQgeyBjcmVhdGVTZWxlY3RvciB9IGZyb20gJ3Jlc2VsZWN0JztcbmltcG9ydCB7IGlzSW50ZWdlciB9IGZyb20gJ2xvZGFzaCc7XG5cbmltcG9ydCB7IElURU1fTkFNRSBhcyBVTklWRVJTQUxfRVhQSVJFX1RJTUVSX0lURU0gfSBmcm9tICcuLi8uLi91dGlsL3VuaXZlcnNhbEV4cGlyZVRpbWVyJztcbmltcG9ydCB0eXBlIHsgQ29uZmlnS2V5VHlwZSwgQ29uZmlnTWFwVHlwZSB9IGZyb20gJy4uLy4uL1JlbW90ZUNvbmZpZyc7XG5cbmltcG9ydCB0eXBlIHsgU3RhdGVUeXBlIH0gZnJvbSAnLi4vcmVkdWNlcic7XG5pbXBvcnQgdHlwZSB7IEl0ZW1zU3RhdGVUeXBlIH0gZnJvbSAnLi4vZHVja3MvaXRlbXMnO1xuaW1wb3J0IHR5cGUge1xuICBDb252ZXJzYXRpb25Db2xvclR5cGUsXG4gIEN1c3RvbUNvbG9yVHlwZSxcbn0gZnJvbSAnLi4vLi4vdHlwZXMvQ29sb3JzJztcbmltcG9ydCB7IERFRkFVTFRfQ09OVkVSU0FUSU9OX0NPTE9SIH0gZnJvbSAnLi4vLi4vdHlwZXMvQ29sb3JzJztcbmltcG9ydCB7IGdldFByZWZlcnJlZFJlYWN0aW9uRW1vamkgYXMgZ2V0UHJlZmVycmVkUmVhY3Rpb25FbW9qaUZyb21TdG9yZWRWYWx1ZSB9IGZyb20gJy4uLy4uL3JlYWN0aW9ucy9wcmVmZXJyZWRSZWFjdGlvbkVtb2ppJztcblxuY29uc3QgREVGQVVMVF9QUkVGRVJSRURfTEVGVF9QQU5FX1dJRFRIID0gMzIwO1xuXG5leHBvcnQgY29uc3QgZ2V0SXRlbXMgPSAoc3RhdGU6IFN0YXRlVHlwZSk6IEl0ZW1zU3RhdGVUeXBlID0+IHN0YXRlLml0ZW1zO1xuXG5leHBvcnQgY29uc3QgZ2V0SGFzQWxsU3Rvcmllc011dGVkID0gY3JlYXRlU2VsZWN0b3IoXG4gIGdldEl0ZW1zLFxuICAoeyBoYXNBbGxTdG9yaWVzTXV0ZWQgfSk6IGJvb2xlYW4gPT4gQm9vbGVhbihoYXNBbGxTdG9yaWVzTXV0ZWQpXG4pO1xuXG5leHBvcnQgY29uc3QgZ2V0QXJlV2VBU3Vic2NyaWJlciA9IGNyZWF0ZVNlbGVjdG9yKFxuICBnZXRJdGVtcyxcbiAgKHsgYXJlV2VBU3Vic2NyaWJlciB9OiBSZWFkb25seTxJdGVtc1N0YXRlVHlwZT4pOiBib29sZWFuID0+XG4gICAgQm9vbGVhbihhcmVXZUFTdWJzY3JpYmVyKVxuKTtcblxuZXhwb3J0IGNvbnN0IGdldFVzZXJBZ2VudCA9IGNyZWF0ZVNlbGVjdG9yKFxuICBnZXRJdGVtcyxcbiAgKHN0YXRlOiBJdGVtc1N0YXRlVHlwZSk6IHN0cmluZyA9PiBzdGF0ZS51c2VyQWdlbnQgYXMgc3RyaW5nXG4pO1xuXG5leHBvcnQgY29uc3QgZ2V0UGlubmVkQ29udmVyc2F0aW9uSWRzID0gY3JlYXRlU2VsZWN0b3IoXG4gIGdldEl0ZW1zLFxuICAoc3RhdGU6IEl0ZW1zU3RhdGVUeXBlKTogQXJyYXk8c3RyaW5nPiA9PlxuICAgIChzdGF0ZS5waW5uZWRDb252ZXJzYXRpb25JZHMgfHwgW10pIGFzIEFycmF5PHN0cmluZz5cbik7XG5cbmV4cG9ydCBjb25zdCBnZXRVbml2ZXJzYWxFeHBpcmVUaW1lciA9IGNyZWF0ZVNlbGVjdG9yKFxuICBnZXRJdGVtcyxcbiAgKHN0YXRlOiBJdGVtc1N0YXRlVHlwZSk6IG51bWJlciA9PiBzdGF0ZVtVTklWRVJTQUxfRVhQSVJFX1RJTUVSX0lURU1dIHx8IDBcbik7XG5cbmNvbnN0IGlzUmVtb3RlQ29uZmlnRmxhZ0VuYWJsZWQgPSAoXG4gIGNvbmZpZzogUmVhZG9ubHk8Q29uZmlnTWFwVHlwZT4sXG4gIGtleTogQ29uZmlnS2V5VHlwZVxuKTogYm9vbGVhbiA9PiBCb29sZWFuKGNvbmZpZ1trZXldPy5lbmFibGVkKTtcblxuY29uc3QgZ2V0UmVtb3RlQ29uZmlnID0gY3JlYXRlU2VsZWN0b3IoXG4gIGdldEl0ZW1zLFxuICAoc3RhdGU6IEl0ZW1zU3RhdGVUeXBlKTogQ29uZmlnTWFwVHlwZSA9PiBzdGF0ZS5yZW1vdGVDb25maWcgfHwge31cbik7XG5cbmV4cG9ydCBjb25zdCBnZXRVc2VybmFtZXNFbmFibGVkID0gY3JlYXRlU2VsZWN0b3IoXG4gIGdldFJlbW90ZUNvbmZpZyxcbiAgKHJlbW90ZUNvbmZpZzogQ29uZmlnTWFwVHlwZSk6IGJvb2xlYW4gPT5cbiAgICBpc1JlbW90ZUNvbmZpZ0ZsYWdFbmFibGVkKHJlbW90ZUNvbmZpZywgJ2Rlc2t0b3AudXNlcm5hbWVzJylcbik7XG5cbmV4cG9ydCBjb25zdCBnZXRTdG9yaWVzRW5hYmxlZCA9IGNyZWF0ZVNlbGVjdG9yKFxuICBnZXRJdGVtcyxcbiAgZ2V0UmVtb3RlQ29uZmlnLFxuICAoc3RhdGU6IEl0ZW1zU3RhdGVUeXBlLCByZW1vdGVDb25maWc6IENvbmZpZ01hcFR5cGUpOiBib29sZWFuID0+XG4gICAgc3RhdGUuaGFzU3Rvcmllc0VuYWJsZWQgIT09IGZhbHNlICYmXG4gICAgKGlzUmVtb3RlQ29uZmlnRmxhZ0VuYWJsZWQocmVtb3RlQ29uZmlnLCAnZGVza3RvcC5pbnRlcm5hbFVzZXInKSB8fFxuICAgICAgaXNSZW1vdGVDb25maWdGbGFnRW5hYmxlZChyZW1vdGVDb25maWcsICdkZXNrdG9wLnN0b3JpZXMnKSlcbik7XG5cbmV4cG9ydCBjb25zdCBnZXREZWZhdWx0Q29udmVyc2F0aW9uQ29sb3IgPSBjcmVhdGVTZWxlY3RvcihcbiAgZ2V0SXRlbXMsXG4gIChcbiAgICBzdGF0ZTogSXRlbXNTdGF0ZVR5cGVcbiAgKToge1xuICAgIGNvbG9yOiBDb252ZXJzYXRpb25Db2xvclR5cGU7XG4gICAgY3VzdG9tQ29sb3JEYXRhPzoge1xuICAgICAgaWQ6IHN0cmluZztcbiAgICAgIHZhbHVlOiBDdXN0b21Db2xvclR5cGU7XG4gICAgfTtcbiAgfSA9PiBzdGF0ZS5kZWZhdWx0Q29udmVyc2F0aW9uQ29sb3IgPz8gREVGQVVMVF9DT05WRVJTQVRJT05fQ09MT1Jcbik7XG5cbmV4cG9ydCBjb25zdCBnZXRDdXN0b21Db2xvcnMgPSBjcmVhdGVTZWxlY3RvcihcbiAgZ2V0SXRlbXMsXG4gIChzdGF0ZTogSXRlbXNTdGF0ZVR5cGUpOiBSZWNvcmQ8c3RyaW5nLCBDdXN0b21Db2xvclR5cGU+IHwgdW5kZWZpbmVkID0+XG4gICAgc3RhdGUuY3VzdG9tQ29sb3JzPy5jb2xvcnNcbik7XG5cbmV4cG9ydCBjb25zdCBnZXRFbW9qaVNraW5Ub25lID0gY3JlYXRlU2VsZWN0b3IoXG4gIGdldEl0ZW1zLFxuICAoeyBza2luVG9uZSB9OiBSZWFkb25seTxJdGVtc1N0YXRlVHlwZT4pOiBudW1iZXIgPT5cbiAgICB0eXBlb2Ygc2tpblRvbmUgPT09ICdudW1iZXInICYmXG4gICAgaXNJbnRlZ2VyKHNraW5Ub25lKSAmJlxuICAgIHNraW5Ub25lID49IDAgJiZcbiAgICBza2luVG9uZSA8PSA1XG4gICAgICA/IHNraW5Ub25lXG4gICAgICA6IDBcbik7XG5cbmV4cG9ydCBjb25zdCBnZXRQcmVmZXJyZWRMZWZ0UGFuZVdpZHRoID0gY3JlYXRlU2VsZWN0b3IoXG4gIGdldEl0ZW1zLFxuICAoeyBwcmVmZXJyZWRMZWZ0UGFuZVdpZHRoIH06IFJlYWRvbmx5PEl0ZW1zU3RhdGVUeXBlPik6IG51bWJlciA9PlxuICAgIHR5cGVvZiBwcmVmZXJyZWRMZWZ0UGFuZVdpZHRoID09PSAnbnVtYmVyJyAmJlxuICAgIE51bWJlci5pc0ludGVnZXIocHJlZmVycmVkTGVmdFBhbmVXaWR0aClcbiAgICAgID8gcHJlZmVycmVkTGVmdFBhbmVXaWR0aFxuICAgICAgOiBERUZBVUxUX1BSRUZFUlJFRF9MRUZUX1BBTkVfV0lEVEhcbik7XG5cbmV4cG9ydCBjb25zdCBnZXRQcmVmZXJyZWRSZWFjdGlvbkVtb2ppID0gY3JlYXRlU2VsZWN0b3IoXG4gIGdldEl0ZW1zLFxuICBnZXRFbW9qaVNraW5Ub25lLFxuICAoc3RhdGU6IFJlYWRvbmx5PEl0ZW1zU3RhdGVUeXBlPiwgc2tpblRvbmU6IG51bWJlcik6IEFycmF5PHN0cmluZz4gPT5cbiAgICBnZXRQcmVmZXJyZWRSZWFjdGlvbkVtb2ppRnJvbVN0b3JlZFZhbHVlKFxuICAgICAgc3RhdGUucHJlZmVycmVkUmVhY3Rpb25FbW9qaSxcbiAgICAgIHNraW5Ub25lXG4gICAgKVxuKTtcblxuZXhwb3J0IGNvbnN0IGdldEhpZGVNZW51QmFyID0gY3JlYXRlU2VsZWN0b3IoXG4gIGdldEl0ZW1zLFxuICAoc3RhdGU6IEl0ZW1zU3RhdGVUeXBlKTogYm9vbGVhbiA9PiBCb29sZWFuKHN0YXRlWydoaWRlLW1lbnUtYmFyJ10pXG4pO1xuIl0sCiAgIm1hcHBpbmdzIjogIjs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBR0Esc0JBQStCO0FBQy9CLG9CQUEwQjtBQUUxQixrQ0FBeUQ7QUFTekQsb0JBQTJDO0FBQzNDLG9DQUFzRjtBQUV0RixNQUFNLG9DQUFvQztBQUVuQyxNQUFNLFdBQVcsd0JBQUMsVUFBcUMsTUFBTSxPQUE1QztBQUVqQixNQUFNLHdCQUF3QixvQ0FDbkMsVUFDQSxDQUFDLEVBQUUseUJBQWtDLFFBQVEsa0JBQWtCLENBQ2pFO0FBRU8sTUFBTSxzQkFBc0Isb0NBQ2pDLFVBQ0EsQ0FBQyxFQUFFLHVCQUNELFFBQVEsZ0JBQWdCLENBQzVCO0FBRU8sTUFBTSxlQUFlLG9DQUMxQixVQUNBLENBQUMsVUFBa0MsTUFBTSxTQUMzQztBQUVPLE1BQU0sMkJBQTJCLG9DQUN0QyxVQUNBLENBQUMsVUFDRSxNQUFNLHlCQUF5QixDQUFDLENBQ3JDO0FBRU8sTUFBTSwwQkFBMEIsb0NBQ3JDLFVBQ0EsQ0FBQyxVQUFrQyxNQUFNLDBDQUFnQyxDQUMzRTtBQUVBLE1BQU0sNEJBQTRCLHdCQUNoQyxRQUNBLFFBQ1ksUUFBUSxPQUFPLE1BQU0sT0FBTyxHQUhSO0FBS2xDLE1BQU0sa0JBQWtCLG9DQUN0QixVQUNBLENBQUMsVUFBeUMsTUFBTSxnQkFBZ0IsQ0FBQyxDQUNuRTtBQUVPLE1BQU0sc0JBQXNCLG9DQUNqQyxpQkFDQSxDQUFDLGlCQUNDLDBCQUEwQixjQUFjLG1CQUFtQixDQUMvRDtBQUVPLE1BQU0sb0JBQW9CLG9DQUMvQixVQUNBLGlCQUNBLENBQUMsT0FBdUIsaUJBQ3RCLE1BQU0sc0JBQXNCLFNBQzNCLDJCQUEwQixjQUFjLHNCQUFzQixLQUM3RCwwQkFBMEIsY0FBYyxpQkFBaUIsRUFDL0Q7QUFFTyxNQUFNLDhCQUE4QixvQ0FDekMsVUFDQSxDQUNFLFVBT0csTUFBTSw0QkFBNEIsd0NBQ3pDO0FBRU8sTUFBTSxrQkFBa0Isb0NBQzdCLFVBQ0EsQ0FBQyxVQUNDLE1BQU0sY0FBYyxNQUN4QjtBQUVPLE1BQU0sbUJBQW1CLG9DQUM5QixVQUNBLENBQUMsRUFBRSxlQUNELE9BQU8sYUFBYSxZQUNwQiw2QkFBVSxRQUFRLEtBQ2xCLFlBQVksS0FDWixZQUFZLElBQ1IsV0FDQSxDQUNSO0FBRU8sTUFBTSw0QkFBNEIsb0NBQ3ZDLFVBQ0EsQ0FBQyxFQUFFLDZCQUNELE9BQU8sMkJBQTJCLFlBQ2xDLE9BQU8sVUFBVSxzQkFBc0IsSUFDbkMseUJBQ0EsaUNBQ1I7QUFFTyxNQUFNLDRCQUE0QixvQ0FDdkMsVUFDQSxrQkFDQSxDQUFDLE9BQWlDLGFBQ2hDLDZEQUNFLE1BQU0sd0JBQ04sUUFDRixDQUNKO0FBRU8sTUFBTSxpQkFBaUIsb0NBQzVCLFVBQ0EsQ0FBQyxVQUFtQyxRQUFRLE1BQU0sZ0JBQWdCLENBQ3BFOyIsCiAgIm5hbWVzIjogW10KfQo=

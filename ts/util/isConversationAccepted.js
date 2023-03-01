@@ -1,0 +1,66 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var isConversationAccepted_exports = {};
+__export(isConversationAccepted_exports, {
+  isConversationAccepted: () => isConversationAccepted
+});
+module.exports = __toCommonJS(isConversationAccepted_exports);
+var import_protobuf = require("../protobuf");
+var import_whatTypeOfConversation = require("./whatTypeOfConversation");
+var import_isInSystemContacts = require("./isInSystemContacts");
+function isConversationAccepted(conversationAttrs, { ignoreEmptyConvo = false } = {}) {
+  const messageRequestsEnabled = window.Signal.RemoteConfig.isEnabled("desktop.messageRequests");
+  if (!messageRequestsEnabled) {
+    return true;
+  }
+  if ((0, import_whatTypeOfConversation.isMe)(conversationAttrs)) {
+    return true;
+  }
+  const messageRequestEnum = import_protobuf.SignalService.SyncMessage.MessageRequestResponse.Type;
+  const { messageRequestResponseType } = conversationAttrs;
+  if (messageRequestResponseType === messageRequestEnum.ACCEPT) {
+    return true;
+  }
+  const { sentMessageCount } = conversationAttrs;
+  const hasSentMessages = (sentMessageCount || 0) > 0;
+  const hasMessagesBeforeMessageRequests = (conversationAttrs.messageCountBeforeMessageRequests || 0) > 0;
+  const hasNoMessages = (conversationAttrs.messageCount || 0) === 0;
+  const isEmptyPrivateConvo = hasNoMessages && (0, import_whatTypeOfConversation.isDirectConversation)(conversationAttrs) && !ignoreEmptyConvo;
+  const isEmptyWhitelistedGroup = hasNoMessages && !(0, import_whatTypeOfConversation.isDirectConversation)(conversationAttrs) && Boolean(conversationAttrs.profileSharing);
+  return isFromOrAddedByTrustedContact(conversationAttrs) || hasSentMessages || hasMessagesBeforeMessageRequests || isEmptyPrivateConvo || isEmptyWhitelistedGroup;
+}
+function isFromOrAddedByTrustedContact(conversationAttrs) {
+  if ((0, import_whatTypeOfConversation.isDirectConversation)(conversationAttrs)) {
+    return (0, import_isInSystemContacts.isInSystemContacts)(conversationAttrs) || Boolean(conversationAttrs.profileSharing);
+  }
+  const { addedBy } = conversationAttrs;
+  if (!addedBy) {
+    return false;
+  }
+  const conversation = window.ConversationController.get(addedBy);
+  if (!conversation) {
+    return false;
+  }
+  return Boolean((0, import_whatTypeOfConversation.isMe)(conversation.attributes) || conversation.get("name") || conversation.get("profileSharing"));
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  isConversationAccepted
+});
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiaXNDb252ZXJzYXRpb25BY2NlcHRlZC50cyJdLAogICJzb3VyY2VzQ29udGVudCI6IFsiLy8gQ29weXJpZ2h0IDIwMjEgU2lnbmFsIE1lc3NlbmdlciwgTExDXG4vLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogQUdQTC0zLjAtb25seVxuXG5pbXBvcnQgdHlwZSB7IENvbnZlcnNhdGlvbkF0dHJpYnV0ZXNUeXBlIH0gZnJvbSAnLi4vbW9kZWwtdHlwZXMuZCc7XG5pbXBvcnQgeyBTaWduYWxTZXJ2aWNlIGFzIFByb3RvIH0gZnJvbSAnLi4vcHJvdG9idWYnO1xuaW1wb3J0IHsgaXNEaXJlY3RDb252ZXJzYXRpb24sIGlzTWUgfSBmcm9tICcuL3doYXRUeXBlT2ZDb252ZXJzYXRpb24nO1xuaW1wb3J0IHsgaXNJblN5c3RlbUNvbnRhY3RzIH0gZnJvbSAnLi9pc0luU3lzdGVtQ29udGFjdHMnO1xuXG4vKipcbiAqIERldGVybWluZSBpZiB0aGlzIGNvbnZlcnNhdGlvbiBzaG91bGQgYmUgY29uc2lkZXJlZCBcImFjY2VwdGVkXCIgaW4gdGVybXNcbiAqIG9mIG1lc3NhZ2UgcmVxdWVzdHNcbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGlzQ29udmVyc2F0aW9uQWNjZXB0ZWQoXG4gIGNvbnZlcnNhdGlvbkF0dHJzOiBDb252ZXJzYXRpb25BdHRyaWJ1dGVzVHlwZSxcbiAgeyBpZ25vcmVFbXB0eUNvbnZvID0gZmFsc2UgfSA9IHt9XG4pOiBib29sZWFuIHtcbiAgY29uc3QgbWVzc2FnZVJlcXVlc3RzRW5hYmxlZCA9IHdpbmRvdy5TaWduYWwuUmVtb3RlQ29uZmlnLmlzRW5hYmxlZChcbiAgICAnZGVza3RvcC5tZXNzYWdlUmVxdWVzdHMnXG4gICk7XG5cbiAgaWYgKCFtZXNzYWdlUmVxdWVzdHNFbmFibGVkKSB7XG4gICAgcmV0dXJuIHRydWU7XG4gIH1cblxuICBpZiAoaXNNZShjb252ZXJzYXRpb25BdHRycykpIHtcbiAgICByZXR1cm4gdHJ1ZTtcbiAgfVxuXG4gIGNvbnN0IG1lc3NhZ2VSZXF1ZXN0RW51bSA9IFByb3RvLlN5bmNNZXNzYWdlLk1lc3NhZ2VSZXF1ZXN0UmVzcG9uc2UuVHlwZTtcblxuICBjb25zdCB7IG1lc3NhZ2VSZXF1ZXN0UmVzcG9uc2VUeXBlIH0gPSBjb252ZXJzYXRpb25BdHRycztcbiAgaWYgKG1lc3NhZ2VSZXF1ZXN0UmVzcG9uc2VUeXBlID09PSBtZXNzYWdlUmVxdWVzdEVudW0uQUNDRVBUKSB7XG4gICAgcmV0dXJuIHRydWU7XG4gIH1cblxuICBjb25zdCB7IHNlbnRNZXNzYWdlQ291bnQgfSA9IGNvbnZlcnNhdGlvbkF0dHJzO1xuXG4gIGNvbnN0IGhhc1NlbnRNZXNzYWdlcyA9IChzZW50TWVzc2FnZUNvdW50IHx8IDApID4gMDtcbiAgY29uc3QgaGFzTWVzc2FnZXNCZWZvcmVNZXNzYWdlUmVxdWVzdHMgPVxuICAgIChjb252ZXJzYXRpb25BdHRycy5tZXNzYWdlQ291bnRCZWZvcmVNZXNzYWdlUmVxdWVzdHMgfHwgMCkgPiAwO1xuICBjb25zdCBoYXNOb01lc3NhZ2VzID0gKGNvbnZlcnNhdGlvbkF0dHJzLm1lc3NhZ2VDb3VudCB8fCAwKSA9PT0gMDtcblxuICBjb25zdCBpc0VtcHR5UHJpdmF0ZUNvbnZvID1cbiAgICBoYXNOb01lc3NhZ2VzICYmXG4gICAgaXNEaXJlY3RDb252ZXJzYXRpb24oY29udmVyc2F0aW9uQXR0cnMpICYmXG4gICAgIWlnbm9yZUVtcHR5Q29udm87XG4gIGNvbnN0IGlzRW1wdHlXaGl0ZWxpc3RlZEdyb3VwID1cbiAgICBoYXNOb01lc3NhZ2VzICYmXG4gICAgIWlzRGlyZWN0Q29udmVyc2F0aW9uKGNvbnZlcnNhdGlvbkF0dHJzKSAmJlxuICAgIEJvb2xlYW4oY29udmVyc2F0aW9uQXR0cnMucHJvZmlsZVNoYXJpbmcpO1xuXG4gIHJldHVybiAoXG4gICAgaXNGcm9tT3JBZGRlZEJ5VHJ1c3RlZENvbnRhY3QoY29udmVyc2F0aW9uQXR0cnMpIHx8XG4gICAgaGFzU2VudE1lc3NhZ2VzIHx8XG4gICAgaGFzTWVzc2FnZXNCZWZvcmVNZXNzYWdlUmVxdWVzdHMgfHxcbiAgICAvLyBhbiBlbXB0eSBncm91cCBpcyB0aGUgc2NlbmFyaW8gd2hlcmUgd2UgbmVlZCB0byByZWx5IG9uXG4gICAgLy8gd2hldGhlciB0aGUgcHJvZmlsZSBoYXMgYWxyZWFkeSBiZWVuIHNoYXJlZCBvciBub3RcbiAgICBpc0VtcHR5UHJpdmF0ZUNvbnZvIHx8XG4gICAgaXNFbXB0eVdoaXRlbGlzdGVkR3JvdXBcbiAgKTtcbn1cblxuLy8gSXMgdGhpcyBzb21lb25lIHdobyBpcyBhIGNvbnRhY3QsIG9yIGFyZSB3ZSBzaGFyaW5nIG91ciBwcm9maWxlIHdpdGggdGhlbT9cbi8vICAgT3IgaXMgdGhlIHBlcnNvbiB3aG8gYWRkZWQgdXMgdG8gdGhpcyBncm91cCBhIGNvbnRhY3Qgb3IgYXJlIHdlIHNoYXJpbmcgcHJvZmlsZVxuLy8gICB3aXRoIHRoZW0/XG5mdW5jdGlvbiBpc0Zyb21PckFkZGVkQnlUcnVzdGVkQ29udGFjdChcbiAgY29udmVyc2F0aW9uQXR0cnM6IENvbnZlcnNhdGlvbkF0dHJpYnV0ZXNUeXBlXG4pOiBib29sZWFuIHtcbiAgaWYgKGlzRGlyZWN0Q29udmVyc2F0aW9uKGNvbnZlcnNhdGlvbkF0dHJzKSkge1xuICAgIHJldHVybiAoXG4gICAgICBpc0luU3lzdGVtQ29udGFjdHMoY29udmVyc2F0aW9uQXR0cnMpIHx8XG4gICAgICBCb29sZWFuKGNvbnZlcnNhdGlvbkF0dHJzLnByb2ZpbGVTaGFyaW5nKVxuICAgICk7XG4gIH1cblxuICBjb25zdCB7IGFkZGVkQnkgfSA9IGNvbnZlcnNhdGlvbkF0dHJzO1xuICBpZiAoIWFkZGVkQnkpIHtcbiAgICByZXR1cm4gZmFsc2U7XG4gIH1cblxuICBjb25zdCBjb252ZXJzYXRpb24gPSB3aW5kb3cuQ29udmVyc2F0aW9uQ29udHJvbGxlci5nZXQoYWRkZWRCeSk7XG4gIGlmICghY29udmVyc2F0aW9uKSB7XG4gICAgcmV0dXJuIGZhbHNlO1xuICB9XG5cbiAgcmV0dXJuIEJvb2xlYW4oXG4gICAgaXNNZShjb252ZXJzYXRpb24uYXR0cmlidXRlcykgfHxcbiAgICAgIGNvbnZlcnNhdGlvbi5nZXQoJ25hbWUnKSB8fFxuICAgICAgY29udmVyc2F0aW9uLmdldCgncHJvZmlsZVNoYXJpbmcnKVxuICApO1xufVxuIl0sCiAgIm1hcHBpbmdzIjogIjs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUlBLHNCQUF1QztBQUN2QyxvQ0FBMkM7QUFDM0MsZ0NBQW1DO0FBTTVCLGdDQUNMLG1CQUNBLEVBQUUsbUJBQW1CLFVBQVUsQ0FBQyxHQUN2QjtBQUNULFFBQU0seUJBQXlCLE9BQU8sT0FBTyxhQUFhLFVBQ3hELHlCQUNGO0FBRUEsTUFBSSxDQUFDLHdCQUF3QjtBQUMzQixXQUFPO0FBQUEsRUFDVDtBQUVBLE1BQUksd0NBQUssaUJBQWlCLEdBQUc7QUFDM0IsV0FBTztBQUFBLEVBQ1Q7QUFFQSxRQUFNLHFCQUFxQiw4QkFBTSxZQUFZLHVCQUF1QjtBQUVwRSxRQUFNLEVBQUUsK0JBQStCO0FBQ3ZDLE1BQUksK0JBQStCLG1CQUFtQixRQUFRO0FBQzVELFdBQU87QUFBQSxFQUNUO0FBRUEsUUFBTSxFQUFFLHFCQUFxQjtBQUU3QixRQUFNLGtCQUFtQixxQkFBb0IsS0FBSztBQUNsRCxRQUFNLG1DQUNILG1CQUFrQixxQ0FBcUMsS0FBSztBQUMvRCxRQUFNLGdCQUFpQixtQkFBa0IsZ0JBQWdCLE9BQU87QUFFaEUsUUFBTSxzQkFDSixpQkFDQSx3REFBcUIsaUJBQWlCLEtBQ3RDLENBQUM7QUFDSCxRQUFNLDBCQUNKLGlCQUNBLENBQUMsd0RBQXFCLGlCQUFpQixLQUN2QyxRQUFRLGtCQUFrQixjQUFjO0FBRTFDLFNBQ0UsOEJBQThCLGlCQUFpQixLQUMvQyxtQkFDQSxvQ0FHQSx1QkFDQTtBQUVKO0FBaERnQixBQXFEaEIsdUNBQ0UsbUJBQ1M7QUFDVCxNQUFJLHdEQUFxQixpQkFBaUIsR0FBRztBQUMzQyxXQUNFLGtEQUFtQixpQkFBaUIsS0FDcEMsUUFBUSxrQkFBa0IsY0FBYztBQUFBLEVBRTVDO0FBRUEsUUFBTSxFQUFFLFlBQVk7QUFDcEIsTUFBSSxDQUFDLFNBQVM7QUFDWixXQUFPO0FBQUEsRUFDVDtBQUVBLFFBQU0sZUFBZSxPQUFPLHVCQUF1QixJQUFJLE9BQU87QUFDOUQsTUFBSSxDQUFDLGNBQWM7QUFDakIsV0FBTztBQUFBLEVBQ1Q7QUFFQSxTQUFPLFFBQ0wsd0NBQUssYUFBYSxVQUFVLEtBQzFCLGFBQWEsSUFBSSxNQUFNLEtBQ3ZCLGFBQWEsSUFBSSxnQkFBZ0IsQ0FDckM7QUFDRjtBQXpCUyIsCiAgIm5hbWVzIjogW10KfQo=
